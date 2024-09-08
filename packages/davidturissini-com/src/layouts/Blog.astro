@@ -1,0 +1,37 @@
+---
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+---
+
+<html>
+  <head>
+    <title>{title}</title>
+    <link rel="stylesheet" href="/prism.css" type="text/css" />
+    <meta charset="utf-8" />
+    <style is:global>
+      html {
+        font-size: 18px;
+      }
+
+      body {
+        padding: 0 16px;
+      }
+
+      pre code[class] {
+        font-size: 0.9rem;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+  
+</html>

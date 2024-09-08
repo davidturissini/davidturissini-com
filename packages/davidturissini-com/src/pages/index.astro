@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BlogLayout from '../layouts/Blog.astro';
+
+const blog = await getCollection('blog');
+
+
+---
+<BlogLayout title="">
+	<ul>
+		{
+			blog.filter((post) => post.data.draft !== true).map((post) => {
+				return (
+					<li>
+						<a href={`/blog/${post.slug}`}>
+							<strong>{post.data.title}</strong>
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</BlogLayout>
+

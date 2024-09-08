@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../layouts/Blog.astro';
+
+export async function getStaticPaths() {
+  const trips = await getCollection('blog');
+  return trips.filter((entry) => entry.data.draft !== true).map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { pubDate } = entry.data;
+
+---
+<BlogLayout title={entry.data.title}>
+  <article class="prose prose-light mx-auto pt-10 pb-10">
+    <header class="py-2 mb-8">
+      <h1 class="pb-0 mb-4">{entry.data.title}</h1>
+    </header>
+    {
+      entry.data.image !== undefined && (
+        <Image src={entry.data.image} alt="" />
+      )
+    }
+    <Content />
+    <footer class="border-t border-slate-300 pt-5 mt-10">
+      {
+        pubDate !== undefined && (
+          <time class="text-slate-400" datetime={pubDate.toISOString()}>
+            {
+              pubDate.toLocaleDateString('en-us', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })
+            }
+          </time>
+        ) }
+    </footer>
+    
+  </article>
+</BlogLayout>
+
