@@ -1,5 +1,7 @@
 ---
 
+import BaseLayout from './Base.astro';
+
 interface Props {
   title: string;
 }
@@ -7,31 +9,21 @@ interface Props {
 const { title } = Astro.props;
 
 ---
+<BaseLayout title={title}>
+  <link slot="head" rel="stylesheet" href="/prism.css" type="text/css" />
+  <style is:global slot="head">
 
-<html>
-  <head>
-    <title>{title}</title>
-    <link rel="stylesheet" href="/prism.css" type="text/css" />
-    <meta charset="utf-8" />
-    <style is:global>
-      html {
-        font-size: 18px;
-      }
+    body {
+      padding: 0 16px;
+    }
 
-      body {
-        padding: 0 16px;
-      }
+    pre code[class] {
+      font-size: 0.9rem;
+    }
+    
+  </style>
+  <main>
+    <slot />
+  </main>
 
-      pre code[class] {
-        font-size: 0.9rem;
-      }
-      
-    </style>
-  </head>
-  <body>
-    <main>
-      <slot />
-    </main>
-  </body>
-  
-</html>
+</BaseLayout>

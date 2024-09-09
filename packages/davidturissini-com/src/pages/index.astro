@@ -1,24 +1,49 @@
 ---
 import { getCollection } from 'astro:content';
-import BlogLayout from '../layouts/Blog.astro';
-
-const blog = await getCollection('blog');
-
-
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Avatar from '../images/avatar.jpg';
+const posts = await getCollection('blog');
 ---
-<BlogLayout title="">
-	<ul>
-		{
-			blog.filter((post) => post.data.draft !== true).map((post) => {
-				return (
-					<li>
-						<a href={`/blog/${post.slug}`}>
-							<strong>{post.data.title}</strong>
-						</a>
-					</li>
-				);
-			})
-		}
-	</ul>
-</BlogLayout>
 
+<Base title="David Turissini's Blog">
+	<div class="bg-gray-100">
+    <!-- Hero Section -->
+    <section class="bg-white py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+				<div class="overflow-hidden h-auto block w-32 h-32 rounded-full mx-auto">
+					<Image
+						src={Avatar}
+						alt="David Turissini profile picture"
+					/>
+				</div>
+        <h1 class="text-4xl font-bold mt-4">
+          Hello! I'm David Turissini.
+        </h1>
+        <p class="mt-4 text-lg text-gray-600">
+          I'm a family man, software engineer, and avid hiker.
+        </p>
+      </div>
+    </section>
+
+    <!-- Latest Posts Section -->
+    <section class="bg-gray-50 py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">Latest Posts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map(post => (
+            <article class="bg-white shadow-lg rounded-lg overflow-hidden">
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-2">
+                  <a href={`/blog/${post.slug}`} class="text-blue-600 hover:underline">
+                    {post.data.title}
+                  </a>
+                </h3>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
