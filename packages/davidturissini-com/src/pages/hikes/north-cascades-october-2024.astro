@@ -1,14 +1,25 @@
 ---
 import BaseLayout from "../../layouts/Base.astro";
-import { gpx as parseGpx } from "@tmcw/togeojson";
-import { DOMParser } from "xmldom";
-import cutthroatPassGpx from "../../gpx/Cutthroat Pass via Pacific Crest Trail.gpx?raw";
-import maplePassGpxRaw from "../../gpx/Heather - Maple Pass Loop.gpx?raw";
-import sahaleArmGpxRaw from "../../gpx/Sahale Mountain via Sahale Arm.gpx?raw";
+import cutthroatPassGpx from "../../gpx/Cutthroat Pass via Pacific Crest Trail.gpx";
+import maplePassGpx from "../../gpx/Heather - Maple Pass Loop.gpx";
+import sahaleArmGpx from "../../gpx/Sahale Mountain via Sahale Arm.gpx";
 import { CurveInterpolator } from "curve-interpolator";
 import type { ExifData, LatLng } from '../../defs/exif';
-import image from '../../images/north-cascades-october-2024/IMG_9431.HEIC?exif';
 import type { ImageMetadata } from "astro";
+
+import hero from '../../images/north-cascades-october-2024/IMG_9431/IMG_E9431.jpg';
+
+/**
+ * 
+ * Cutthroat Pass Images
+ */
+
+import img8804 from '../../images/north-cascades-october-2024/cutthroat-pass/IMG_8804/IMG_E8804.jpg';
+import img8835 from '../../images/north-cascades-october-2024/cutthroat-pass/IMG_8835/IMG_E8835.jpg';
+import img8844 from '../../images/north-cascades-october-2024/cutthroat-pass/IMG_8844/IMG_E8844.jpg';
+import img9005 from '../../images/north-cascades-october-2024/cutthroat-pass/IMG_9005/IMG_E9005.jpg';
+
+import { Image } from "astro:assets";
 
 const images = import.meta.glob<{ image: ImageMetadata & {
   exif: ExifData 
@@ -16,9 +27,6 @@ const images = import.meta.glob<{ image: ImageMetadata & {
   query: '?exif',
   eager: true,
 });
-
-
-console.log(images);
 
 function minutesToDecimal(
   value: LatLng['value'],
@@ -30,21 +38,9 @@ function minutesToDecimal(
   );
 }
 
-const parsed = parseGpx(
-  new DOMParser().parseFromString(cutthroatPassGpx, "text/xml"),
-);
-
-const maplePassGpx = parseGpx(
-  new DOMParser().parseFromString(maplePassGpxRaw, "text/xml"),
-);
-
-const sahaleArmGpx = parseGpx(
-  new DOMParser().parseFromString(sahaleArmGpxRaw, "text/xml"),
-);
-
 let route: GeoJSON.LineString | null = null;
-if (parsed.type === "FeatureCollection") {
-  parsed.features.forEach((feature) => {
+if (cutthroatPassGpx.type === "FeatureCollection") {
+  cutthroatPassGpx.features.forEach((feature) => {
     if (feature.geometry.type === "LineString") {
       route = feature.geometry;
     }
@@ -62,113 +58,52 @@ const coordinates = interpolated.getPoints(25000);
 ---
 
 <BaseLayout title="North Cascades October 2024">
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-  <style type="text/css">
-    body {
-      height: 2000vh;
-    }
-
-    #map {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+  <style slot="head">
+    .hero {
+      height: 80dvh;
+      position: relative;
       z-index: 1;
-    }
-  </style>
-  <div id="map"></div>
-  <script
-    is:inline
-    define:vars={{ coordinates, gpx: parsed, maplePassGpx, sahaleArmGpx }}
-  >
-    window.coordinates = coordinates;
-    window.gpx = gpx;
-    window.sahaleArmGpx = sahaleArmGpx;
-    window.maplePassGpx = maplePassGpx;
-  </script>
-  <script>
-    declare global {
-      interface Window {
-        gpx: GeoJSON.FeatureCollection<
-          GeoJSON.Geometry,
-          GeoJSON.GeoJsonProperties
-        >;
-        sahaleArmGpx: GeoJSON.FeatureCollection<
-          GeoJSON.Geometry,
-          GeoJSON.GeoJsonProperties
-        >;
-        maplePassGpx: GeoJSON.FeatureCollection<
-          GeoJSON.Geometry,
-          GeoJSON.GeoJsonProperties
-        >;
-        coordinates: GeoJSON.LineString["coordinates"];
+      overflow: clip;
+
+      img {
+        position: relative;
+        z-index: 1;
+        min-height: 100%;
+        min-width: 100%;;
+        width: auto;
+        object-fit: cover;
+      }
+
+      .overlay {
+        background: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
       }
     }
-    import {
-      map as leafletMap,
-      tileLayer,
-      geoJSON as createGeoJson,
-    } from "leaflet";
-    import rafThrottle from "raf-throttle";
 
-    const { coordinates, gpx } = window;
-    const firstCoordinate = coordinates[0];
-    const map = leafletMap("map", {
-      // dragging: false,
-      // zoomControl: false,
-      doubleClickZoom: false,
-      touchZoom: false,
-      scrollWheelZoom: false,
-    }).setView(
-      {
-        lat: firstCoordinate[1],
-        lng: firstCoordinate[0],
-      },
-      18,
-    );
-
-    tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-
-    const geoJson = createGeoJson(gpx);
-    geoJson.addTo(map);
-
-    createGeoJson(window.maplePassGpx).addTo(map);
-    createGeoJson(window.sahaleArmGpx).addTo(map);
-
-    const height = document.body.offsetHeight;
-    const windowHeight = window.innerHeight;
-    const scrollDistance = height - windowHeight;
-
-    // window.addEventListener('scroll', rafThrottle(
-    //   () => {
-    //     const percentage = window.scrollY / scrollDistance;
-    //     const index = Math.round(percentage * coordinates.length);
-    //     const coordinate = coordinates[index];
-    //     if (coordinate === undefined) {
-    //       return;
-    //     }
-    //     const previous = Math.max(index - 100, 0);
-    //     const next = Math.min(index + 100, coordinates.length - 1);
-    //     const current = coordinates[previous];
-    //     const angle = Math.atan2(coordinates[next][0] - current[0], coordinates[next][1] - current[1])  * 180 / Math.PI;
-
-    //     map.setView({
-    //       lat: coordinate[1],
-    //       lng: coordinate[0]
-    //     });
-
-    //   }), {
-    //   passive: true,
-    // });
-  </script>
+  </style>
+  <!-- Hero -->
+  <section class="hero">
+    <img src={hero.src} alt="" />
+    <div class="overlay"></div>
+  </section>
+  <main class="p-10">
+    <section>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </section>
+    <section>
+      <Image src={img8804} alt="" />
+      <Image src={img8835} alt="" />
+      <Image src={img8844} alt="" />
+      <Image src={img9005} alt="" />
+    </section>
+  </main>
+  <!-- End Hero -->
+  
 </BaseLayout>

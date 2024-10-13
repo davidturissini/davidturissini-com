@@ -10,3 +10,8 @@ declare module "*.HEIC?exif" {
     exif,
   };
 }
+
+declare module "*.gpx" {
+  const t: ReturnType<typeof import("@tmcw/togeojson").gpx>;
+  export default t;
+}

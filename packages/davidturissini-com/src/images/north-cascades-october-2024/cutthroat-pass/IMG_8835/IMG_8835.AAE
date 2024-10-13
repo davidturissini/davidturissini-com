@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adjustmentBaseVersion</key>
+	<integer>1</integer>
+	<key>adjustmentData</key>
+	<data>
+	eyJlZmZlY3RzIjpbeyJuYW1lIjoiUmVuZGVyS2l0Lk1hZ2ljTUxFZmZlY3QiLCJzdGF0
+	ZSI6eyJjb21wdXRlZFZhbHVlcyI6IntcImJyaWdodG5lc3NcIjotMC4yOTE5OTIyLFwi
+	ZXZcIjowLjAxNDY0ODQzNzUsXCJjb250cmFzdFwiOjAuMDMxMjUsXCJ0ZW1wZXJhdHVy
+	ZVwiOjYzMjQuMjE4OCxcInNoYWRvd3NcIjotMC42MTA4Mzk4NCxcImhpZ2hsaWdodHNc
+	IjowLjA2MDU0Njg3NX0ifX0seyJzdGF0ZSI6eyJ2aWJyYW5jeSI6MC4wNzA3NzcxMywi
+	c3RyZW5ndGgiOjAuNDEzMzgwMTgsImludGVuc2l0eSI6MC40MTMzODAxNzU4Mjg5MzM3
+	fSwibmFtZSI6IkFkanVzdENsYXJpdHlQcm8ifSx7Im5hbWUiOiJBZGp1c3RUZW1wZXJh
+	dHVyZSIsInN0YXRlIjp7InRlbXBlcmF0dXJlIjo2MzI0LjIxODh9fSx7Im5hbWUiOiJB
+	ZGp1c3RFeHBvc3VyZSIsInN0YXRlIjp7ImV4cG9zdXJlIjowLjAxNDY0ODQzNzV9fSx7
+	Im5hbWUiOiJBZGp1c3RCcmlnaHRuZXNzQW5kQ29udHJhc3QiLCJzdGF0ZSI6eyJpbnRl
+	bnNpdGllcyI6WyItMC4yOTE5OTIxODc1IiwiMC4wMzEyNSJdfX0seyJzdGF0ZSI6eyJp
+	bnRlbnNpdGllcyI6WyItMC42MTA4Mzk4NDM3NSIsIjAuMDYwNTQ2ODc1Il19LCJuYW1l
+	IjoiQWRqdXN0U2hhZG93c0FuZEhpZ2hsaWdodHMifSx7InN0YXRlIjp7ImNlbnRlciI6
+	InswLjUsIDAuNDk5ODE0NjQ1OTcyMTE4ODl9Iiwic2l6ZSI6InsxLCAwLjgyNDUxNTEx
+	OTE1NzgzMTA0fSIsImZsaXBwZWQiOmZhbHNlfSwibmFtZSI6IkNyb3BHb2xkZW4ifV19
+	</data>
+	<key>adjustmentEditorBundleID</key>
+	<string>com.latenitesoft.CameraPlus2</string>
+	<key>adjustmentFormatIdentifier</key>
+	<string>com.latenitesoft.CameraPlus2.EditingFormatIdentifier</string>
+	<key>adjustmentFormatVersion</key>
+	<string>1.0</string>
+	<key>adjustmentTimestamp</key>
+	<date>2024-10-07T19:54:47Z</date>
+</dict>
+</plist>

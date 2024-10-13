@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adjustmentBaseVersion</key>
+	<integer>1</integer>
+	<key>adjustmentData</key>
+	<data>
+	eyJlZmZlY3RzIjpbeyJuYW1lIjoiQWRqdXN0Q2xhcml0eVBybyIsInN0YXRlIjp7Imlu
+	dGVuc2l0eSI6MC42NDI3MTEyMjIxNzE3ODM0LCJ2aWJyYW5jeSI6MC4wOTE0NTE5NCwi
+	c3RyZW5ndGgiOjAuNjQyNzExMn19LHsic3RhdGUiOnsidGVtcGVyYXR1cmUiOjYyMDAu
+	OTQ4fSwibmFtZSI6IkFkanVzdFRlbXBlcmF0dXJlIn0seyJuYW1lIjoiQWRqdXN0RXhw
+	b3N1cmUiLCJzdGF0ZSI6eyJleHBvc3VyZSI6MC4xMTUyMzQzNzV9fSx7InN0YXRlIjp7
+	ImludGVuc2l0aWVzIjpbIi0wLjEwMjA1MDc4MTI1IiwiMC4wMTg1NTQ2ODc1Il19LCJu
+	YW1lIjoiQWRqdXN0QnJpZ2h0bmVzc0FuZENvbnRyYXN0In0seyJuYW1lIjoiQWRqdXN0
+	U2hhZG93c0FuZEhpZ2hsaWdodHMiLCJzdGF0ZSI6eyJpbnRlbnNpdGllcyI6WyItMC4x
+	ODk0NTMxMjUiLCIwLjAyMzQzNzUiXX19LHsibmFtZSI6IkNyb3BHb2xkZW4iLCJzdGF0
+	ZSI6eyJmbGlwcGVkIjpmYWxzZSwiY2VudGVyIjoiezAuNSwgMC40OTk4MTQ2NDU5NzIx
+	MTg4OX0iLCJzaXplIjoiezEsIDAuODI0NTE1MTE5MTU3ODMxMDR9In19XX0=
+	</data>
+	<key>adjustmentEditorBundleID</key>
+	<string>com.latenitesoft.CameraPlus2</string>
+	<key>adjustmentFormatIdentifier</key>
+	<string>com.latenitesoft.CameraPlus2.EditingFormatIdentifier</string>
+	<key>adjustmentFormatVersion</key>
+	<string>1.0</string>
+	<key>adjustmentTimestamp</key>
+	<date>2024-10-07T20:05:42Z</date>
+</dict>
+</plist>

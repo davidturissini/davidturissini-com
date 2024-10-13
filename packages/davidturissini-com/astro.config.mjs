@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
+import { gpx as parseGpx } from "@tmcw/togeojson";
 import tailwind from '@astrojs/tailwind';
+import { DOMParser } from "xmldom";
 import mdx from '@astrojs/mdx';
 import exif from 'exifreader';
 import { basename, dirname, join as pathJoin } from 'path';
@@ -16,6 +18,18 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      {
+        name: 'gpx-loader',
+        transform(code, id) {
+          if (!/\.gpx$/.test(id)) return null
+
+          const parsed = parseGpx(
+            new DOMParser().parseFromString(code, "text/xml"),
+          );
+
+          return `export default ${JSON.stringify(parsed)}`;
+        }
+      },
       {
         name: 'exif-loader',
         transform(code, id) {
