@@ -1,0 +1,87 @@
+---
+title: Build Your Own AI Code Review Agent in 5 Minutes with Github Actions
+---
+
+Curious how well a large language model (LLM) can review your code? In this post, I'll show you how to set up a custom AI-powered code review tool in just 5 minutes using GitHub Actions.
+
+### Prerequisites
+
+This article assumes some level of familarity with Javascript and Github Actions.
+
+## The Idea
+
+We'll build a GitHub Actions workflow that passes a pull request's changeset to ChatGPT. We'll prompt ChatGPT to review the changes and provide feedback. We'll then take its response and post it back to the original PR so that the PR author can see the feeback.
+
+This is a very simple and straight forward way to see how simple it is to integrate LLMs into your workflow _right now_.
+
+## Step 1: Get an API Token for your LLM
+
+First, you'll need an API token to programmatically access ChatGPT. You'll also need permission to add secrets to your GitHub repository or organization.
+
+Once you have your API token, add it to your repo or org secrets. We will reference the secret in our Github Actions workflow. A good name for your Open API token would be `OPEN_API_KEY`.
+
+## Step 2: Create a Github Action
+
+With your API token ready, it's time to wire everything up into Github Actions. Our workflow should run whenever a PR is created or when new commits are pushed to an existing PR. When the workflow runs, it will:
+
+- Pull down the changeset and then pass the changeset into our code review script.
+- Use [daves-dead-simple/open-ai-action](https://github.com/daves-dead-simple/open-ai-action) to pass our prompt to Open AI
+- Comment the output back to the original pr.
+
+Here's what a workflow file may look like:
+
+```yml
+name: LLM Code Review
+on:
+  pull_request:
+    branches:
+      - whichever-branch-you-want-code-review-for
+    types:
+      - opened # when a PR is opened
+      - synchronize # when code is pushed to a pr
+
+jobs:
+  code-review:
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Get Diff
+        id: diff
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "changeset<<EOF" >> $GITHUB_OUTPUT
+          echo "$(gh pr diff ${{ github.event.pull_request.number }} --repo "${{ github.repository }}")" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Run AI code review
+        uses: daves-dead-simple/open-ai-action@main
+        id: code-review
+        env:
+          OPEN_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        with:
+          prompt: |
+            Please code review the following changeset: ${{ steps.get_diff.outputs.changeset }}
+
+      - name: Comment on PR with AI review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --repo "${{ github.repository }}" \
+            --body "${{ steps.code-review.outputs.completion }}"
+```
+
+This workflow will run everytime a PR is open or updated (i.e., when new commits are pushed). It uses the github CLI to fetch the diff and then pass it along to Chat GPT along with instruction for what to _do_ with the changeset we are sending it. The LLM will in turn give us its response which we post back to the original PR.
+
+## Conclusion
+
+This is a very simple way to integrate OpenAI or any other LLM into your dev workflow. You can easily iterate on this idea to not only let users pick the model and provider of their choice, but even provide custom rules or instructions to the LLM.
