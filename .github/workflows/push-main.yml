@@ -7,8 +7,6 @@ jobs:
   build-and-deploy-dot-com:
     name: Build and Deploy removeunused.com
     runs-on: ubuntu-latest
-    needs:
-      - static
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
