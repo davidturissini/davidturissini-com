@@ -1,0 +1,81 @@
+---
+title: "From Chat to Command: A Practical Guide to LLM Routing"
+draft: true
+---
+
+## 1. TL;DR
+
+- One‑sentence summary of the router pattern
+- Key take‑away benefits (speed, modularity, cost control)
+
+The LLM Router pattern takes a plain English command and converts it into a structured call.
+
+## 2. Why Another Pattern?
+
+- Explosion of task‑specific tools → need for flexible orchestration
+- Traditional “all‑in‑one” LLM agents vs. single‑purpose routers
+
+## 3. What Is the Router Pattern?
+
+- **Definition:** LLM as a stateless dispatcher
+- **Inputs:** natural‑language command → structured call
+- **Outputs:** formatted tool invocation (no reasoning, no post‑processing)
+
+## 4. Core Architecture
+
+- Prompt template (few‑shot mapping examples)
+- Tool registry or function‑schema list
+- Execution layer that runs the selected tool
+- Optional logging/telemetry
+
+## 5. Routing Flow Step‑by‑Step
+
+1. Receive user utterance
+2. LLM matches intent → selects tool + arguments
+3. Return JSON payload to orchestrator
+4. Orchestrator executes tool and returns result to user
+
+## 6. Concrete Example
+
+- **User:** “Git squash `my_feature` against `main`”
+- **Router output:** JSON → CLI `git rebase -i main`
+- Show: input prompt, LLM output JSON, final CLI snippet
+
+## 7. Design Guidelines
+
+- Keep router role minimal—no business logic in prompts
+- Use strict JSON schema + `function_call` API to curb hallucinations
+- Add confidence scores / fallback when uncertainty is high
+- Version your tool registry for reproducibility
+
+## 8. When to Use (and When Not)
+
+- **Ideal:** finite, well‑defined action set (DevOps, SaaS admin, internal tooling)
+- **Avoid:** open‑ended creative tasks needing reasoning or synthesis
+
+## 9. Security & Safety Considerations
+
+- Command allow‑list / deny‑list
+- Argument validation before execution
+- Rate limiting and audit logs
+
+## 10. Performance & Cost
+
+- Small model or distillation often sufficient (no deep reasoning)
+- Cache successful routings for common commands
+
+## 11. Testing Strategy
+
+- **Unit tests:** NL → JSON mapping accuracy
+- **Integration tests:** end‑to‑end tool invocations in staging
+
+## 12. Future Extensions
+
+- Multi‑step routing (pipeline of tools)
+- Dynamic tool discovery via embeddings
+- Self‑evaluation loop for continuous improvement
+
+## 13. Conclusion
+
+- Router pattern = simplest reliable bridge between users and tools
+- Fast to implement, cheap to run, easy to reason about—use it wherever commands matter
